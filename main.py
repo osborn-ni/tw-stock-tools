@@ -8,7 +8,7 @@ start_date = '2025-01-01'  # 抓取起始日
 end_date = datetime.now().strftime('%Y-%m-%d') # 自動抓到今天
 
 # 固定檔名
-output_filename = "tw_stock_data_latest.csv"
+output_filename = f"tw_stock_data_{stock_id}_latest.csv"
 
 print(f"🚀 開始抓取股票: {stock_id} (從 {start_date} 到 {end_date})")
 
@@ -30,3 +30,4 @@ if not df.empty:
 else:
     print("⚠️ 抓取失敗，請檢查 FinMind 服務或網路連線。")
     
+

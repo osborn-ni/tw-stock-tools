@@ -30,3 +30,13 @@ jobs:
       - name: 4. 執行 Python 腳本
         # 如果你的主程式檔名不是 main.py，請修改這裡
         run: python main.py
+
+      - name: 5. 自動將產生的 CSV 推回儲存庫
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add *.csv
+          # 只有在有檔案變更時才 commit，避免報錯
+          git diff --quiet && git diff --staged --quiet || (git commit -m "自動更新股價資料: $(date +'%Y-%m-%d')" && git push)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

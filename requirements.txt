@@ -1,6 +1,6 @@
-numpy==2.4.1
-pandas==3.0.0
-finmind==1.9.3
+numpy
+pandas
+FinMind
 tqdm
 requests
 python-oracledb

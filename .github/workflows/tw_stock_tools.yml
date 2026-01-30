@@ -35,8 +35,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add *.csv
-          # 只有在有檔案變更時才 commit，避免報錯
-          git diff --quiet && git diff --staged --quiet || (git commit -m "自動更新股價資料: $(date +'%Y-%m-%d')" && git push)
+          # 確保 git 會追蹤 data 資料夾內的所有變動
+          git add data/*.csv
+          git diff --quiet && git diff --staged --quiet || (git commit -m "自動更新多支股價資料" && git push)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

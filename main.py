@@ -2,15 +2,17 @@ import pandas as pd
 from FinMind.data import DataLoader
 from datetime import datetime
 
-# 設定參數
+# 1. 設定參數
 stock_id = '2330'
-start_date = '2025-01-01'
-# 自動取得今天日期作為 end_date
-end_date = datetime.now().strftime('%Y-%m-%d')
+start_date = '2025-01-01'  # 抓取起始日
+end_date = datetime.now().strftime('%Y-%m-%d') # 自動抓到今天
 
-print(f"正在抓取 {stock_id} 從 {start_date} 到 {end_date} 的資料...")
+# 固定檔名
+output_filename = "tw_stock_data_latest.csv"
 
-# 抓取資料
+print(f"🚀 開始抓取股票: {stock_id} (從 {start_date} 到 {end_date})")
+
+# 2. 抓取資料
 dl = DataLoader()
 df = dl.taiwan_stock_daily(
     stock_id=stock_id,
@@ -18,10 +20,13 @@ df = dl.taiwan_stock_daily(
     end_date=end_date
 )
 
+# 3. 檢查資料並存檔
 if not df.empty:
-    # 產生檔名：2330_2025-01-01_2026-01-30.csv
-    file_name = f"{stock_id}_{start_date}_{end_date}.csv"
-    df.to_csv(file_name, index=False, encoding='utf-8-sig') # utf-8-sig 讓 Excel 打開不亂碼
-    print(f"檔案已成功產生: {file_name}")
+    # index=False 代表不要存 Pandas 的 0, 1, 2 索引
+    # encoding='utf-8-sig' 確保 Excel 打開中文不亂碼
+    df.to_csv(output_filename, index=False, encoding='utf-8-sig')
+    print(f"✅ 成功！資料已更新至固定檔案: {output_filename}")
+    print(f"📊 目前共有 {len(df)} 筆交易資料。")
 else:
-    print("抓取失敗，沒有資料。")
+    print("⚠️ 抓取失敗，請檢查 FinMind 服務或網路連線。")
+    

@@ -1,33 +1,42 @@
 import pandas as pd
 from FinMind.data import DataLoader
 from datetime import datetime
+import os
 
-# 1. 設定參數
-stock_id = '2330'
-start_date = '2025-01-01'  # 抓取起始日
-end_date = datetime.now().strftime('%Y-%m-%d') # 自動抓到今天
+# 1. 設定要抓取的股票清單 (你想加幾隻就加幾隻)
+stock_list = ['2330', '2317', '2454', '0050']
+start_date = '2025-01-01'
+end_date = datetime.now().strftime('%Y-%m-%d')
 
-# 固定檔名
-output_filename = f"tw_stock_data_{stock_id}_latest.csv"
+# 建立存放資料的資料夾 (如果不存在的話)
+folder_name = "data"
+if not os.path.exists(folder_name):
+    os.makedirs(folder_name)
 
-print(f"🚀 開始抓取股票: {stock_id} (從 {start_date} 到 {end_date})")
-
-# 2. 抓取資料
 dl = DataLoader()
-df = dl.taiwan_stock_daily(
-    stock_id=stock_id,
-    start_date=start_date,
-    end_date=end_date
-)
 
-# 3. 檢查資料並存檔
-if not df.empty:
-    # index=False 代表不要存 Pandas 的 0, 1, 2 索引
-    # encoding='utf-8-sig' 確保 Excel 打開中文不亂碼
-    df.to_csv(output_filename, index=False, encoding='utf-8-sig')
-    print(f"✅ 成功！資料已更新至固定檔案: {output_filename}")
-    print(f"📊 目前共有 {len(df)} 筆交易資料。")
-else:
-    print("⚠️ 抓取失敗，請檢查 FinMind 服務或網路連線。")
+print(f"🚀 開始批次抓取任務：{stock_list}")
+
+# 2. 使用迴圈抓取每一隻股票
+for stock_id in stock_list:
+    print(f"正在抓取 {stock_id}...")
     
+    try:
+        df = dl.taiwan_stock_daily(
+            stock_id=stock_id,
+            start_date=start_date,
+            end_date=end_date
+        )
 
+        if not df.empty:
+            # 存放到 data 資料夾下，檔名範例：data/tw_stock_data_2330_latest.csv
+            file_path = os.path.join(folder_name, f"tw_stock_data_{stock_id}_latest.csv")
+            df.to_csv(file_path, index=False, encoding='utf-8-sig')
+            print(f"✅ {stock_id} 存檔成功！")
+        else:
+            print(f"⚠️ {stock_id} 沒有資料。")
+            
+    except Exception as e:
+        print(f"❌ 抓取 {stock_id} 時發生錯誤: {e}")
+
+print("\n✨ 所有任務執行完畢！")

@@ -3,3 +3,4 @@ pandas==3.0.0
 finmind==1.9.3
 tqdm
 requests
+python-oracledb

@@ -20,28 +20,26 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          # 先暫時關閉 cache 確保環境純淨，成功一次後再開回來
-          # cache: 'pip' 
+          cache: 'pip' # 現在可以安心開啟快取了
 
       - name: 3. 安裝必要套件
         run: |
-          python -m pip install --upgrade pip setuptools wheel
-          # 直接在指令列安裝，避免 requirements.txt 編碼或不可見字元問題
-          pip install numpy pandas FinMind tqdm requests python-oracledb --no-cache-dir
+          python -m pip install --upgrade pip
+          # 因為 requirements.txt 現在只有 oci 等穩定套件，直接安裝即可
+          pip install -r requirements.txt
           pip freeze
 
       - name: 4. 執行 Python 腳本
-        # 如果你的主程式檔名不是 main.py，請修改這裡
+        # 這裡會跑你的爬蟲與清洗邏輯
         run: python main.py
 
-      - name: 5. 自動將產生的 CSV 推回儲存庫
+      - name: 5. 自動將產生的 CSV 推回 GitHub 儲存庫
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # 確保 git 會追蹤 data 資料夾內的所有變動
-          # 如果沒有 data 資料夾可能會報錯，先建立它以防萬一
           mkdir -p data
           git add data/*.csv || echo "No CSV files to add"
+          # 只有在檔案有變動時才 commit，避免報錯
           git diff --quiet && git diff --staged --quiet || (git commit -m "自動更新多支股價資料" && git push)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

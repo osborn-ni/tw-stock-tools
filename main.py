@@ -1,19 +1,27 @@
 import pandas as pd
-import numpy as np
 from FinMind.data import DataLoader
+from datetime import datetime
 
-print(f"Pandas 版本: {pd.__version__}")
-print(f"Numpy 版本: {np.__version__}")
+# 設定參數
+stock_id = '2330'
+start_date = '2025-01-01'
+# 自動取得今天日期作為 end_date
+end_date = datetime.now().strftime('%Y-%m-%d')
 
-# 試抓一筆資料看看（以台積電為例）
+print(f"正在抓取 {stock_id} 從 {start_date} 到 {end_date} 的資料...")
+
+# 抓取資料
 dl = DataLoader()
 df = dl.taiwan_stock_daily(
-    stock_id='2330',
-    start_date='2025-01-01'
+    stock_id=stock_id,
+    start_date=start_date,
+    end_date=end_date
 )
 
 if not df.empty:
-    print("成功抓取 FinMind 資料！")
-    print(df.head())
+    # 產生檔名：2330_2025-01-01_2026-01-30.csv
+    file_name = f"{stock_id}_{start_date}_{end_date}.csv"
+    df.to_csv(file_name, index=False, encoding='utf-8-sig') # utf-8-sig 讓 Excel 打開不亂碼
+    print(f"檔案已成功產生: {file_name}")
 else:
-    print("資料抓取失敗，請檢查網路或 FinMind 狀態。")
+    print("抓取失敗，沒有資料。")

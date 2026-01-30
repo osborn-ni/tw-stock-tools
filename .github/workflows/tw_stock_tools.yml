@@ -5,7 +5,7 @@ on:
   push:
     branches: [ "main" ] # 當你推送程式碼到 main 分支時執行
   schedule:
-    - cron: '0 1 * * *'  # 每天台灣時間 09:00 (UTC 01:00) 自動執行
+    - cron: '0 8 * * *'  # 每天台灣時間 16:00 (UTC 08:00) 自動執行
   workflow_dispatch:      # 讓你可以手動從 GitHub 網頁點擊按鈕執行
 
 jobs:

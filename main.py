@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 # 1. 設定要抓取的股票清單 (你想加幾隻就加幾隻)
-stock_list = ['2330', '2317', '2454', '0050']
+stock_list = ['2330', '2317', '2308', '2454', '2881', '2882', '3711', '2382', '2412', '2891']
 start_date = '2025-01-01'
 end_date = datetime.now().strftime('%Y-%m-%d')
 
@@ -40,3 +40,4 @@ for stock_id in stock_list:
         print(f"❌ 抓取 {stock_id} 時發生錯誤: {e}")
 
 print("\n✨ 所有任務執行完畢！")
+

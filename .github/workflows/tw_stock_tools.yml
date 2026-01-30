@@ -19,7 +19,7 @@ jobs:
       - name: 2. 設定 Python 環境
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' # <--- 請改成 3.12，這是目前的「黃金穩定版」
+          python-version: '3.11' # <--- 請改成 3.11，這是目前的「黃金穩定版」
           cache: 'pip' # 開啟快取，讓下次安裝套件更快
 
       - name: 3. 安裝必要套件

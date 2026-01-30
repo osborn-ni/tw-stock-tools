@@ -1,0 +1,32 @@
+name: TW Stock Tools Auto Run
+
+# 定義觸發條件
+on:
+  push:
+    branches: [ "main" ] # 當你推送程式碼到 main 分支時執行
+  schedule:
+    - cron: '0 1 * * *'  # 每天台灣時間 09:00 (UTC 01:00) 自動執行
+  workflow_dispatch:      # 讓你可以手動從 GitHub 網頁點擊按鈕執行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. 複製儲存庫程式碼
+        uses: actions/checkout@v4
+
+      - name: 2. 設定 Python 環境
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.5'
+          cache: 'pip' # 開啟快取，讓下次安裝套件更快
+
+      - name: 3. 安裝必要套件
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 4. 執行 Python 腳本
+        # 如果你的主程式檔名不是 main.py，請修改這裡
+        run: python main.py

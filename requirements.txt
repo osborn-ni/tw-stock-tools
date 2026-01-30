@@ -3,4 +3,4 @@ pandas
 FinMind
 tqdm
 requests
-python-oracledb
+oci
